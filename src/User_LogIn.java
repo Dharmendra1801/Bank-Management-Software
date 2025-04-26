@@ -42,6 +42,7 @@ public class User_LogIn {
             System.out.println("Password: ");
             u_pass = sc.nextLine();
             n++;
+            
         }
         while(!dao.loginCheckUser(u_name,u_pass));
         System.out.println("\nLog in successful");

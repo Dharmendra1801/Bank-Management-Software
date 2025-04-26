@@ -59,11 +59,7 @@ public class DAO {
         return rs.next();
     }
     public void createAccount(String username, String type, double balance) throws Exception {
-        String q1 = "insert into acc_username(User_name) values (?)";
         String q2 = "select count(*) from acc_username";
-        PreparedStatement p1 = con.prepareStatement(q1);
-        p1.setString(1, username);
-        p1.executeUpdate();
         Statement p2 = con.createStatement();
         ResultSet rs = p2.executeQuery(q2);
         rs.next();
@@ -75,6 +71,10 @@ public class DAO {
         p3.setString(2, type);
         p3.setDouble(3, balance);
         p3.executeUpdate();
+        String q1 = "insert into acc_username(User_name) values (?)";
+        PreparedStatement p1 = con.prepareStatement(q1);
+        p1.setString(1, username);
+        p1.executeUpdate();
     }
     public List getAccounts(String user) throws Exception {
         String q = "SELECT u.Account_No, a.Account_Type FROM acc_username u JOIN accDet a on u.Account_No = a.Account_No WHERE user_name = ?";
@@ -109,5 +109,33 @@ public class DAO {
         ls.add(rs.getString(1));
         ls.add(String.valueOf(rs.getDouble(2)));
         return ls;
+    }
+    public int updateBalance(int accNo, double amt) throws Exception {
+        String q = "update accDet set Account_Balance = ? where Account_No = ?";
+        PreparedStatement p = con.prepareStatement(q);
+        p.setDouble(1, amt);
+        p.setInt(2, accNo);
+        return p.executeUpdate();
+    }
+    public void transfer(double fBal, double tBal, int fAccNo, int tAccNo) throws Exception {
+        String q = "update accDet set Account_Balance = ? where Account_No = ?";
+        con.setAutoCommit(false);
+        try {
+            PreparedStatement p = con.prepareStatement(q);
+            p.setDouble(1, fBal);
+            p.setInt(2, fAccNo);
+            p.addBatch();
+            p.setDouble(1, tBal);
+            p.setInt(2, tAccNo);
+            p.addBatch();
+            p.executeBatch();
+            con.commit(); 
+        } catch (Exception e) {
+            con.rollback();
+            System.out.println("Error!!!");
+            System.exit(0);
+        } finally {
+            con.setAutoCommit(true);
+        }
     }
 }

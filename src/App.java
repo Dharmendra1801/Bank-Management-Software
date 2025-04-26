@@ -22,7 +22,7 @@ public class App {
             System.out.println("3) Get list of all the accounts");
             System.out.println("4) Delete Account");
             System.out.println("5) Check Account Balance");
-            System.out.println("6) Select account for transaction");
+            System.out.println("6) Make transaction");
             System.out.println("7) Log Out");
             System.out.println();
             int out = sc.nextInt();
@@ -43,6 +43,9 @@ public class App {
                     break;
                 case 5:
                     acc.checkBal();
+                    break;
+                case 6:
+                    acc.makeT();
                     break;
                 default:
                     System.out.println("Enter valid number");

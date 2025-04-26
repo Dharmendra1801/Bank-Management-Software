@@ -8,7 +8,6 @@ public class Account {
         String type = sc.nextLine();
         System.out.println("Enter initial balance of the account");
         double bal = sc.nextDouble();
-        sc.close();
         dao.createAccount(user_name,type,bal);
     }
     public void accExist() throws Exception {
@@ -42,5 +41,57 @@ public class Account {
         List<String> ls = dao.checkBal(accNo);
         System.out.println("\nAccount type: " + ls.get(0));
         System.out.println("Account balance: " + ls.get(1));
+    }
+    public void makeT() throws Exception {
+        boolean ch = true;
+        while (ch) {
+            System.out.println("\nSelect one of the following transactions:");
+            System.out.println("1) Credit into Account");
+            System.out.println("2) Debit from Account");
+            System.out.println("3) Transfer to another Account\n");
+            System.out.println("4) Back");
+            int c = sc.nextInt();
+            sc.nextLine();
+            System.out.println();
+
+            Transactions t = new Transactions();
+            switch (c) {
+                case 1:
+                    System.out.println("Enter the Account Number: ");
+                    int accNo = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("Enter the amount to be credited: ");
+                    double amt = sc.nextDouble();
+                    sc.nextLine();
+                    t.credit(amt, accNo);
+                    break;
+                case 2:
+                    System.out.println("Enter the Account Number: ");
+                    int acNo = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("Enter the amount to be debited: ");
+                    double am = sc.nextDouble();
+                    sc.nextLine();
+                    t.debit(am, acNo);
+                    break;
+                case 3:
+                    System.out.println("Enter the Sender's Account Number: ");
+                    int fAccNo = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("Enter the Receiver's Account Number: ");
+                    int tAccNo = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("Enter the amount to be credited: ");
+                    double amount = sc.nextDouble();
+                    sc.nextLine();
+                    t.transfer(amount, fAccNo, tAccNo);
+                    break;
+                default:
+                    System.out.println("Enter Correct Input!!!\n");
+                    ch = false;
+                    break;
+            }
+            ch = !ch;
+        }
     }
 }

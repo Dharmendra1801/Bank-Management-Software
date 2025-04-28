@@ -51,30 +51,32 @@ public class DAO {
         System.out.println("Wrong Password");
         return false;
     }
-    public boolean accExist(int accNo) throws Exception {
+    public boolean accExist(String accNo) throws Exception {
         String q = "SELECT 1 FROM acc_username WHERE Account_No = ?";
         PreparedStatement ps = con.prepareStatement(q);
-        ps.setInt(1, accNo);
+        ps.setString(1, accNo);
         ResultSet rs = ps.executeQuery();
         return rs.next();
     }
     public void createAccount(String username, String type, double balance) throws Exception {
-        String q2 = "select count(*) from acc_username";
-        Statement p2 = con.createStatement();
-        ResultSet rs = p2.executeQuery(q2);
+        String q2 = "select count(*) from acc_username where user_name = ?";
+        PreparedStatement p2 = con.prepareStatement(q2);
+        p2.setString(1, username);
+        ResultSet rs = p2.executeQuery();
         rs.next();
-        int an = rs.getInt(1);
-        System.out.println("Your account number is: "+String.valueOf(an));
+        String AccNo = username + "@" + String.valueOf((rs.getInt(1)+1));
+        String q1 = "insert into acc_username values (?,?)";
+        PreparedStatement p1 = con.prepareStatement(q1);
+        p1.setString(1, AccNo);
+        p1.setString(2, username);
+        p1.executeUpdate();
+        System.out.println("\nYour account number is: "+AccNo);
         String q3 = "insert into accDet values(?,?,?)";
         PreparedStatement p3 = con.prepareStatement(q3);
-        p3.setInt(1, an);
+        p3.setString(1, AccNo);
         p3.setString(2, type);
         p3.setDouble(3, balance);
         p3.executeUpdate();
-        String q1 = "insert into acc_username(User_name) values (?)";
-        PreparedStatement p1 = con.prepareStatement(q1);
-        p1.setString(1, username);
-        p1.executeUpdate();
     }
     public List getAccounts(String user) throws Exception {
         String q = "SELECT u.Account_No, a.Account_Type FROM acc_username u JOIN accDet a on u.Account_No = a.Account_No WHERE user_name = ?";
@@ -84,25 +86,25 @@ public class DAO {
         List<List<String>> ls = new ArrayList<>();
         while (rs.next()) {
             ls.add(new ArrayList<>());
-            ls.get(ls.size()-1).add(String.valueOf(rs.getInt(1)));
+            ls.get(ls.size()-1).add(rs.getString(1));
             ls.get(ls.size()-1).add(rs.getString(2));
         }
         return ls;
     }
-    public void delAcc(int accNo) throws Exception {
+    public void delAcc(String accNo) throws Exception {
         String q2 = "Delete FROM acc_username WHERE Account_No = ?";
         String q1 = "Delete FROM accDet WHERE Account_No = ?";
         PreparedStatement p1 = con.prepareStatement(q1);
         PreparedStatement p2 = con.prepareStatement(q2);
-        p1.setInt(1, accNo);
-        p2.setInt(1, accNo);
+        p1.setString(1, accNo);
+        p2.setString(1, accNo);
         p1.executeUpdate();
         p2.executeUpdate();
     }
-    public List<String> checkBal(int accNo) throws Exception {
+    public List<String> checkBal(String accNo) throws Exception {
         String q = "SELECT Account_Type, Account_Balance FROM accDet WHERE Account_No = ?";
         PreparedStatement ps = con.prepareStatement(q);
-        ps.setInt(1, accNo);
+        ps.setString(1, accNo);
         ResultSet rs = ps.executeQuery();
         rs.next();
         List<String> ls = new ArrayList<>();
@@ -110,23 +112,23 @@ public class DAO {
         ls.add(String.valueOf(rs.getDouble(2)));
         return ls;
     }
-    public int updateBalance(int accNo, double amt) throws Exception {
+    public int updateBalance(String accNo, double amt) throws Exception {
         String q = "update accDet set Account_Balance = ? where Account_No = ?";
         PreparedStatement p = con.prepareStatement(q);
         p.setDouble(1, amt);
-        p.setInt(2, accNo);
+        p.setString(2, accNo);
         return p.executeUpdate();
     }
-    public void transfer(double fBal, double tBal, int fAccNo, int tAccNo) throws Exception {
+    public void transfer(double fBal, double tBal, String fAccNo, String tAccNo) throws Exception {
         String q = "update accDet set Account_Balance = ? where Account_No = ?";
         con.setAutoCommit(false);
         try {
             PreparedStatement p = con.prepareStatement(q);
             p.setDouble(1, fBal);
-            p.setInt(2, fAccNo);
+            p.setString(2, fAccNo);
             p.addBatch();
             p.setDouble(1, tBal);
-            p.setInt(2, tAccNo);
+            p.setString(2, tAccNo);
             p.addBatch();
             p.executeBatch();
             con.commit(); 
@@ -137,5 +139,12 @@ public class DAO {
         } finally {
             con.setAutoCommit(true);
         }
+    }
+    public void changePass(String username, String password) throws Exception {
+        String q = "update username_pass set password = ? where user_name = ?";
+        PreparedStatement p = con.prepareStatement(q);
+        p.setString(1, password);
+        p.setString(2, username);
+        p.executeUpdate();
     }
 }

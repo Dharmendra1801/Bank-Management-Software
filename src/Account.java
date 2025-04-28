@@ -12,7 +12,8 @@ public class Account {
             System.out.println("4) Delete Account");
             System.out.println("5) Check Account Balance");
             System.out.println("6) Make transaction");
-            System.out.println("7) Log Out\n");
+            System.out.println("7) Change Password");
+            System.out.println("8) Log Out\n");
             
             int out = sc.nextInt();
             sc.nextLine();
@@ -28,7 +29,7 @@ public class Account {
                     accList(username);
                     break;
                 case 4:
-                    delAcc();
+                    delAcc(username);
                     break;
                 case 5:
                     checkBal();
@@ -37,13 +38,16 @@ public class Account {
                     makeT(username);
                     break;
                 case 7:
+                    changePass(username);
+                    break;
+                case 8:
                     User_LogIn.LogIn();
                     break;
                 default:
                     System.out.println("Enter valid number");
                     break;
             }
-            System.out.println("\nIf you want to quit press 'Y', if not then anything else");
+            System.out.println("\nIf you want to QUIT press 'Y', if not then anything else");
             String c = sc.nextLine();
             if (c.toUpperCase().equals("Y")) {
                 System.out.println("\nThank You for using.");
@@ -60,8 +64,8 @@ public class Account {
     }
     public void accExist() throws Exception {
         System.out.println("Enter account number to be checked");
-        int accNo = sc.nextInt();
-        sc.nextLine();
+        String accNo = sc.nextLine();
+        System.out.println();
         if (dao.accExist(accNo)) System.out.println("Account No: " + accNo + " Exists");
         else System.out.println("Account No: " + accNo + " Doesn't exists");
     }
@@ -72,11 +76,26 @@ public class Account {
             System.out.println("Account Number: " + x.get(0) + "\tAccount Type: " + x.get(1));
         }
     }
-    public void delAcc() throws Exception {
+    public void delAcc(String username) throws Exception {
         System.out.println("Enter the account number to be deleted: ");
-        int accNo = sc.nextInt();
-        sc.nextLine();
-        System.out.println("Are you sure you want to delete it? (Press 'Y')");
+        String accNo = sc.nextLine();
+        System.out.println("Enter the password to proceed.");
+        int n = 0;
+        while (true) {
+            String pass = sc.nextLine();
+            if (n==3) {
+                System.out.println("\nContinous wrong passwords!!!");
+                System.out.println("Log in again");
+                n = Integer.MIN_VALUE;
+                break;
+            }
+            if (!dao.loginCheckUser(username, pass)) {
+                n++;
+            }
+            else break;
+        }
+        if (n==Integer.MIN_VALUE) User_LogIn.LogIn();
+        System.out.println("\nAre you sure you want to delete it? (Press 'Y')");
         String c = sc.nextLine();
         if (!c.toUpperCase().equals("Y")) return;
         dao.delAcc(accNo);
@@ -84,11 +103,29 @@ public class Account {
     }
     public void checkBal() throws Exception {
         System.out.println("Enter the account number: ");
-        int accNo = sc.nextInt();
-        sc.nextLine();
+        String accNo = sc.nextLine();
         List<String> ls = dao.checkBal(accNo);
         System.out.println("\nAccount type: " + ls.get(0));
         System.out.println("Account balance: " + ls.get(1));
+    }
+    public void changePass(String username) throws Exception {
+        boolean c = false;
+        String pass1;
+        String pass2;
+        do {    
+            if (c) {
+                System.out.println("Passwords doesn't match.");
+            }
+            System.out.println("\nEnter a password (min. 5 characters)");
+            pass1 = sc.nextLine();
+            System.out.println("Enter again");
+            pass2 = sc.nextLine();
+            c = true;
+        }
+        while (!pass1.equals(pass2));
+        dao.changePass(username, pass2);
+        System.out.println("\nNow please log in");
+        User_LogIn.LogIn();
     }
     public void makeT(String username) throws Exception {
         boolean ch = true;
@@ -106,8 +143,7 @@ public class Account {
             switch (c) {
                 case 1:
                     System.out.println("Enter the Account Number: ");
-                    int accNo = sc.nextInt();
-                    sc.nextLine();
+                    String accNo = sc.nextLine();
                     System.out.println("Enter the amount to be credited: ");
                     double amt = sc.nextDouble();
                     sc.nextLine();
@@ -115,24 +151,21 @@ public class Account {
                     break;
                 case 2:
                     System.out.println("Enter the Account Number: ");
-                    int acNo = sc.nextInt();
-                    sc.nextLine();
+                    String acNo = sc.nextLine();
                     System.out.println("Enter the amount to be debited: ");
                     double am = sc.nextDouble();
                     sc.nextLine();
-                    t.debit(am, acNo);
+                    t.debit(username, am, acNo);
                     break;
                 case 3:
                     System.out.println("Enter the Sender's Account Number: ");
-                    int fAccNo = sc.nextInt();
-                    sc.nextLine();
+                    String fAccNo = sc.nextLine();
                     System.out.println("Enter the Receiver's Account Number: ");
-                    int tAccNo = sc.nextInt();
-                    sc.nextLine();
+                    String tAccNo = sc.nextLine();
                     System.out.println("Enter the amount to be credited: ");
                     double amount = sc.nextDouble();
                     sc.nextLine();
-                    t.transfer(amount, fAccNo, tAccNo);
+                    t.transfer(username, amount, fAccNo, tAccNo);
                     break;
                 case 4:
                     menu(username);

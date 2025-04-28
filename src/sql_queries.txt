@@ -1,0 +1,2 @@
+create table accDet(Account_No varchar(20) primary key, Account_Type varchar(10), Account_Balance double);
+create table acc_username(Account_No varchar(20) primary key, User_name varchar(20));

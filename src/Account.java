@@ -116,7 +116,7 @@ public class Account {
             if (c) {
                 System.out.println("Passwords doesn't match.");
             }
-            System.out.println("\nEnter a password (min. 5 characters)");
+            System.out.println("\nEnter a password:");
             pass1 = sc.nextLine();
             System.out.println("Enter again");
             pass2 = sc.nextLine();

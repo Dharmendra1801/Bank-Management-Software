@@ -1,9 +1,10 @@
 import java.util.Scanner;
 
 public class User_LogIn {
-    Scanner sc = new Scanner(System.in);
-    DAO dao = new DAO();
-    public void Registration() throws Exception {
+    static Scanner sc = new Scanner(System.in);
+    static DAO dao = new DAO();
+
+    public static void Registration() throws Exception {
         String u_name;
         String pass1;
         String pass2;
@@ -27,7 +28,13 @@ public class User_LogIn {
         dao.addUserCred(u_name,pass1);
         System.out.println("\nNow please log in");
     }
-    public String LogIn() throws Exception {
+    public static void LogIn() throws Exception {
+        System.out.println("\nIf you are a new user please type '0' for registering.\nElse type any number.");
+        int ans = sc.nextInt();
+        sc.nextLine();
+        if (ans==0) {
+            Registration();
+        }
         String u_name;
         String u_pass;
         int n = 0;
@@ -42,10 +49,11 @@ public class User_LogIn {
             System.out.println("Password: ");
             u_pass = sc.nextLine();
             n++;
-            
         }
         while(!dao.loginCheckUser(u_name,u_pass));
         System.out.println("\nLog in successful");
-        return u_name;
+
+        Account acc = new Account();
+        acc.menu(u_name);
     }
 }

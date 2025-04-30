@@ -1,18 +1,25 @@
-## Getting Started
+Bank Management System (Java + JDBC + MySQL + JFrame)
+A simple console + GUI-based mini banking system built using Java, JDBC, MySQL, and JFrame.
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Project Summary:
 
-## Folder Structure
+1) Allows user registration, login, and full account management.
+2) Users can create, delete, check balance, and transfer funds between accounts.
+3) Transactions include: credit, debit, transfer (with password confirmation).
+4) DAO class handles all JDBC calls (insert, update, check), ensuring smooth database communication.
+5) JFrame is used to make the system interactive with GUI components like forms, dialogs, and menus.
 
-The workspace contains two folders by default, where:
+DB Setup (MySQL):
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+create database BankDB; 
+use BankDB;
+create table username_pass(User_name varchar(20) primary key, password varchar(10));
+create table accDet(Account_No varchar(20) primary key, Account_Type varchar(10), Account_Balance double);
+create table acc_username(Account_No varchar(20) primary key, User_name varchar(20));
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Tools Used:
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+1) Java (Core + Swing)
+2) JDBC (MySQL connector)
+3) MySQL (Local DB)
+4) JFrame (for user-friendly interface)

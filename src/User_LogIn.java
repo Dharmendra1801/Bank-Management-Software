@@ -1,59 +1,180 @@
-import java.util.Scanner;
+import java.awt.Font;
+import javax.swing.*;
 
 public class User_LogIn {
-    static Scanner sc = new Scanner(System.in);
+    private static Frame frame = App.frame;
     static DAO dao = new DAO();
 
     public static void Registration() throws Exception {
-        String u_name;
-        String pass1;
-        String pass2;
-        do {
-            System.out.println("\nEnter your username to be used for registering:");
-            u_name = sc.nextLine();
-        }
-        while (dao.checkInUsage(u_name,true));
-        boolean c = false;
-        do {    
-            if (c) {
-                System.out.println("Passwords doesn't match.");
-            }
-            System.out.println("\nEnter a password:");
-            pass1 = sc.nextLine();
-            System.out.println("Enter again");
-            pass2 = sc.nextLine();
-            c = true;
-        }
-        while (!pass1.equals(pass2));
-        dao.addUserCred(u_name,pass1);
-        System.out.println("\nNow please log in");
-    }
-    public static void LogIn() throws Exception {
-        System.out.println("\nIf you are a new user please type '0' for registering.\nElse type any number.");
-        int ans = sc.nextInt();
-        sc.nextLine();
-        if (ans==0) {
-            Registration();
-        }
-        String u_name;
-        String u_pass;
-        int n = 0;
-        System.out.println("\nPlease enter your username and password to log in.\n");
-        do {
-            if (n==5) {
-                System.out.println("\nMultiple wrong passwords");
-                System.exit(0);
-            }
-            System.out.println("Username: ");
-            u_name = sc.nextLine();
-            System.out.println("Password: ");
-            u_pass = sc.nextLine();
-            n++;
-        }
-        while(!dao.loginCheckUser(u_name,u_pass));
-        System.out.println("\nLog in successful");
 
-        Account acc = new Account();
-        acc.menu(u_name);
+        // RoundedPanel panel = new RoundedPanel();
+        // // panel.setOpaque(true);
+        // panel.setBounds(180, 100, 360, 420);
+        // panel.setLayout(null);
+
+        // JLabel unL = new JLabel("Enter username(unique):");
+        // unL.setOpaque(true);
+        // unL.setBounds(30,30,720,40);
+        // unL.setFont(new Font("Ariel",Font.PLAIN,18));
+
+        // JLabel psL = new JLabel("Password:");
+        // psL.setOpaque(true);
+        // psL.setBounds(30,150,720,40);
+        // psL.setFont(new Font("Ariel",Font.PLAIN,18));
+
+        // JLabel rpsL = new JLabel("Re-enter Password:");
+        // rpsL.setOpaque(true);
+        // rpsL.setBounds(30,150,720,40);
+        // rpsL.setFont(new Font("Ariel",Font.PLAIN,18));
+
+        // JTextField un = new JTextField();
+        // un.setBounds(30, 80, 300, 40);
+        
+        // JTextField ps = new JTextField();
+        // ps.setBounds(30, 200, 300, 40);
+
+        // JButton submit = new JButton("Submit");
+        // submit.setBounds(130, 280, 100, 40);
+        // submit.addActionListener(e -> {
+        //     String u_name = un.getText();
+        //     String u_pass = ps.getText();
+        //     un.setText("");
+        //     ps.setText("");
+        //     try {
+        //         int ans = dao.loginCheckUser(u_name,u_pass);
+        //         if (ans==0) {
+        //             frame.getContentPane().removeAll();
+        //             frame.revalidate();
+        //             frame.repaint();
+        //             JOptionPane.showMessageDialog(frame,"Works","Error",JOptionPane.ERROR_MESSAGE);
+        //             // new Account(u_name);
+        //         }
+        //         else if (ans==-1) {
+        //             JOptionPane.showMessageDialog(frame,"Wrong Password","Error",JOptionPane.ERROR_MESSAGE);
+        //         }
+        //         else if (ans==1) {
+        //             JOptionPane.showMessageDialog(frame,"Username isn't registered","Error",JOptionPane.ERROR_MESSAGE);
+        //         }
+        //     } catch (Exception e1) {
+        //         System.out.println(e1.getMessage());
+        //     }
+        // });
+        
+        // JButton reg = new JButton("Sign up");
+        // reg.setBounds(130, 340, 100, 40);
+        // reg.addActionListener(e -> {
+        //     try {
+        //         frame.getContentPane().removeAll();
+        //         frame.revalidate();
+        //         frame.repaint();
+        //         // Registration();
+        //     } catch (Exception e1) {
+        //         System.out.println(e1.getMessage());
+        //     }
+        // });
+
+        // panel.add(un);
+        // panel.add(ps);
+        // panel.add(unL);
+        // panel.add(psL);
+        // panel.add(submit);
+        // panel.add(reg);
+        // frame.add(panel);
+        // frame.setTitle("Signing In");
+        // String u_name;
+        // String pass1;
+        // String pass2;
+        // do {
+        //     System.out.println("\nEnter your username to be used for registering:");
+        //     u_name = sc.nextLine();
+        // }
+        // while (dao.checkInUsage(u_name,true));
+        // boolean c = false;
+        // do {    
+        //     if (c) {
+        //         System.out.println("Passwords doesn't match.");
+        //     }
+        //     System.out.println("\nEnter a password:");
+        //     pass1 = sc.nextLine();
+        //     System.out.println("Enter again");
+        //     pass2 = sc.nextLine();
+        //     c = true;
+        // }
+        // while (!pass1.equals(pass2));
+        // dao.addUserCred(u_name,pass1);
+        // System.out.println("\nNow please log in");
+    }
+
+    public static void LogIn() throws Exception {
+
+        RoundedPanel panel = new RoundedPanel();
+        // panel.setOpaque(true);
+        panel.setBounds(180, 100, 360, 420);
+        panel.setLayout(null);
+
+        JLabel unL = new JLabel("Username:");
+        unL.setOpaque(true);
+        unL.setBounds(30,30,720,40);
+        unL.setFont(new Font("Ariel",Font.PLAIN,18));
+
+        JLabel psL = new JLabel("Password:");
+        psL.setOpaque(true);
+        psL.setBounds(30,150,720,40);
+        psL.setFont(new Font("Ariel",Font.PLAIN,18));
+
+        JTextField un = new JTextField();
+        un.setBounds(30, 80, 300, 40);
+        
+        JTextField ps = new JTextField();
+        ps.setBounds(30, 200, 300, 40);
+
+        JButton submit = new JButton("Submit");
+        submit.setBounds(130, 280, 100, 40);
+        submit.addActionListener(e -> {
+            String u_name = un.getText();
+            String u_pass = ps.getText();
+            un.setText("");
+            ps.setText("");
+            try {
+                int ans = dao.loginCheckUser(u_name,u_pass);
+                if (ans==0) {
+                    frame.getContentPane().removeAll();
+                    frame.revalidate();
+                    frame.repaint();
+                    JOptionPane.showMessageDialog(frame,"Works","Error",JOptionPane.ERROR_MESSAGE);
+                    // new Account(u_name);
+                }
+                else if (ans==-1) {
+                    JOptionPane.showMessageDialog(frame,"Wrong Password","Error",JOptionPane.ERROR_MESSAGE);
+                }
+                else if (ans==1) {
+                    JOptionPane.showMessageDialog(frame,"Username isn't registered","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+        });
+        
+        JButton reg = new JButton("Sign up");
+        reg.setBounds(130, 340, 100, 40);
+        reg.addActionListener(e -> {
+            try {
+                frame.getContentPane().removeAll();
+                frame.revalidate();
+                frame.repaint();
+                // Registration();
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+        });
+
+        panel.add(un);
+        panel.add(ps);
+        panel.add(unL);
+        panel.add(psL);
+        panel.add(submit);
+        panel.add(reg);
+        frame.add(panel);
+        frame.setTitle("Signing In");
     }
 }

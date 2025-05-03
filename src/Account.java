@@ -3,6 +3,9 @@ import java.util.*;
 public class Account {
     Scanner sc = new Scanner(System.in);
     DAO dao = new DAO();
+    Account(String username) throws Exception {
+        menu(username);
+    }
     public void menu(String username) throws Exception {
         while (true) {
             System.out.println("\nSelect from the Menu: ");
@@ -89,7 +92,7 @@ public class Account {
                 n = Integer.MIN_VALUE;
                 break;
             }
-            if (!dao.loginCheckUser(username, pass)) {
+            if (dao.loginCheckUser(username, pass)!=0) {
                 n++;
             }
             else break;

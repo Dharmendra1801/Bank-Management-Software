@@ -37,19 +37,15 @@ public class DAO {
         }
         return false;
     }
-    public boolean loginCheckUser(String name, String pass) throws Exception {
-        if (!checkInUsage(name,false)) {
-            System.out.println("Wrong Username");
-            return false;
-        }
+    public int loginCheckUser(String name, String pass) throws Exception {
+        if (!checkInUsage(name,false)) return 1;
         String q = "SELECT password FROM username_pass WHERE user_name = ?";
         PreparedStatement ps = con.prepareStatement(q);
         ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
         rs.next();
-        if (rs.getString(1).equals(pass)) return true;
-        System.out.println("Wrong Password");
-        return false;
+        if (rs.getString(1).equals(pass)) return 0;
+        return -1;
     }
     public boolean accExist(String accNo) throws Exception {
         String q = "SELECT 1 FROM acc_username WHERE Account_No = ?";

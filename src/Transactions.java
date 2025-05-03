@@ -25,7 +25,7 @@ public class Transactions {
                 n = Integer.MIN_VALUE;
                 break;
             }
-            if (!dao.loginCheckUser(username, pass)) {
+            if (dao.loginCheckUser(username, pass)!=0) {
                 n++;
             }
             else break;
@@ -51,7 +51,7 @@ public class Transactions {
                 n = Integer.MIN_VALUE;
                 break;
             }
-            if (!dao.loginCheckUser(username, pass)) {
+            if (dao.loginCheckUser(username, pass)!=0) {
                 n++;
             }
             else break;

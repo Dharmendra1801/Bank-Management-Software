@@ -46,7 +46,6 @@ public class App {
                 frame.repaint();
                 User_LogIn.LogIn();
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
                 System.out.println(e1.getMessage()); 
             }
         });
@@ -58,7 +57,6 @@ public class App {
                 frame.repaint();
                 User_LogIn.Registration();
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
                 System.out.println(e1.getMessage()); 
             }
         });

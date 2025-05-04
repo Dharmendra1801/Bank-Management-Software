@@ -26,19 +26,16 @@ public class DAO {
         ps.setString(2, pass);
         ps.executeUpdate();
     }
-    public boolean checkInUsage(String name, boolean c) throws Exception {
+    public boolean checkInUsage(String name) throws Exception {
         String q = "SELECT 1 FROM username_pass WHERE user_name = ?";
         PreparedStatement ps = con.prepareStatement(q);
         ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            if (c) System.out.println("User name already exist.\nPlease select a new one.");
-            return true;
-        }
+        if (rs.next()) return true;
         return false;
     }
     public int loginCheckUser(String name, String pass) throws Exception {
-        if (!checkInUsage(name,false)) return 1;
+        if (!checkInUsage(name)) return 1;
         String q = "SELECT password FROM username_pass WHERE user_name = ?";
         PreparedStatement ps = con.prepareStatement(q);
         ps.setString(1, name);

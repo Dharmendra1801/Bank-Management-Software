@@ -2,10 +2,12 @@ import java.awt.Font;
 import javax.swing.*;
 
 public class User_LogIn {
-    private static Frame frame = App.frame;
+    
     static DAO dao = new DAO();
 
     public static void Registration() throws Exception {
+
+        Frame frame = App.frame;
 
         RoundedPanel panel = new RoundedPanel();
         
@@ -100,10 +102,13 @@ public class User_LogIn {
         panel.add(orLabel);
         frame.add(panel);
         frame.setTitle("Sign Up Page");
+        frame.setVisible(true);
         
     }
 
     public static void LogIn() throws Exception {
+
+        Frame frame = App.frame;
 
         RoundedPanel panel = new RoundedPanel();
     
@@ -139,7 +144,6 @@ public class User_LogIn {
                     frame.getContentPane().removeAll();
                     frame.revalidate();
                     frame.repaint();
-                    JOptionPane.showMessageDialog(frame,"Works","Error",JOptionPane.ERROR_MESSAGE);
                     new Account(u_name);
                 }
                 else if (ans==-1) {
@@ -180,5 +184,6 @@ public class User_LogIn {
         panel.add(orLabel);
         frame.add(panel);
         frame.setTitle("Sign In Page");
+        frame.setVisible(true);
     }
 }

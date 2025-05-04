@@ -39,23 +39,19 @@ public class App {
         frame.add(panel);
         frame.add(signup_button);
         frame.setVisible(true);
-        // User_LogIn.LogIn();
 
         signin_button.addActionListener(e -> {
             try {
-                // System.out.println("Works");
                 frame.getContentPane().removeAll();
                 frame.revalidate();
                 frame.repaint();
-                // User_LogIn.LogIn();
-                new Account("uday2005");
+                User_LogIn.LogIn();
             } catch (Exception e1) {
                 System.out.println(e1.getMessage()); 
             }
         });
         signup_button.addActionListener(e -> {
             try {
-                // System.out.println("Works");
                 frame.getContentPane().removeAll();
                 frame.revalidate();
                 frame.repaint();

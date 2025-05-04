@@ -84,7 +84,7 @@ public class Account {
             frame.revalidate();
             frame.repaint();
             try {
-                // changePass(username);
+                changePass(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -98,11 +98,44 @@ public class Account {
         home.add(mbal);
         home.add(mchPass);
 
+        JMenuItem debit = new JMenuItem("Debit");
+        debit.addActionListener(e -> {
+            try {
+                Transactions.debit(username);
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+        });
+
+        JMenuItem credit = new JMenuItem("Credit");
+        credit.addActionListener(e -> {
+            try {
+                Transactions.credit();
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+        });
+
+        JMenuItem transfer = new JMenuItem("Transfer");
+        transfer.addActionListener(e -> {
+            try {
+                Transactions.transfer(username);
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+        });
+
         JMenu pay = new JMenu("Payments");
+        pay.add(debit);
+        pay.add(credit);
+        pay.add(transfer);
         
         JMenuItem log = new JMenuItem("Log out");
         log.addActionListener(e -> {
             try {
+                frame.getContentPane().removeAll();
+                frame.revalidate();
+                frame.repaint();
                 App.app();
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
@@ -137,6 +170,7 @@ public class Account {
                 System.out.println(e1.getMessage());
             }
         });
+        newAcc.setOpaque(true);
         newAcc.setBounds(65,50,400,60);
         newAcc.setFont(new Font("Ariel",Font.BOLD,25));;
 
@@ -191,7 +225,7 @@ public class Account {
             frame.revalidate();
             frame.repaint();
             try {
-                // changePass(username);
+                changePass(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -217,8 +251,7 @@ public class Account {
         frame.setJMenuBar(menu);
         frame.setTitle("Home");
         frame.setVisible(true);
-    }
-    
+    } 
     private void createAccount(String user_name) throws Exception {
 
         RoundedPanel panel = new RoundedPanel();
@@ -370,81 +403,111 @@ public class Account {
         panel.add(create);
         frame.add(caL);
         frame.add(panel);
+    }
+    private void changePass(String user_name) throws Exception {
 
-        // System.out.println("Enter the account number: ");
-        // String accNo = sc.nextLine();
-        // List<String> ls = dao.checkBal(accNo);
-        // System.out.println("\nAccount type: " + ls.get(0));
-        // System.out.println("Account balance: " + ls.get(1));
-    }
-    private void changePass(String username) throws Exception {
-        boolean c = false;
-        String pass1;
-        String pass2;
-        do {    
-            if (c) {
-                System.out.println("Passwords doesn't match.");
-            }
-            System.out.println("\nEnter a password:");
-            pass1 = sc.nextLine();
-            System.out.println("Enter again");
-            pass2 = sc.nextLine();
-            c = true;
-        }
-        while (!pass1.equals(pass2));
-        dao.changePass(username, pass2);
-        System.out.println("\nNow please log in");
-        User_LogIn.LogIn();
-    }
-    private void makeT(String username) throws Exception {
-        boolean ch = true;
-        while (ch) {
-            System.out.println("\nSelect one of the following transactions:");
-            System.out.println("1) Credit into Account");
-            System.out.println("2) Debit from Account");
-            System.out.println("3) Transfer to another Account");
-            System.out.println("4) Back\n");
-            int c = sc.nextInt();
-            sc.nextLine();
-            System.out.println();
+        RoundedPanel panel = new RoundedPanel();
+        panel.setBounds(100,120,520,480);
 
-            Transactions t = new Transactions();
-            switch (c) {
-                case 1:
-                    System.out.println("Enter the Account Number: ");
-                    String accNo = sc.nextLine();
-                    System.out.println("Enter the amount to be credited: ");
-                    double amt = sc.nextDouble();
-                    sc.nextLine();
-                    t.credit(amt, accNo);
-                    break;
-                case 2:
-                    System.out.println("Enter the Account Number: ");
-                    String acNo = sc.nextLine();
-                    System.out.println("Enter the amount to be debited: ");
-                    double am = sc.nextDouble();
-                    sc.nextLine();
-                    t.debit(username, am, acNo);
-                    break;
-                case 3:
-                    System.out.println("Enter the Sender's Account Number: ");
-                    String fAccNo = sc.nextLine();
-                    System.out.println("Enter the Receiver's Account Number: ");
-                    String tAccNo = sc.nextLine();
-                    System.out.println("Enter the amount to be credited: ");
-                    double amount = sc.nextDouble();
-                    sc.nextLine();
-                    t.transfer(username, amount, fAccNo, tAccNo);
-                    break;
-                case 4:
-                    menu(username);
-                    break;
-                default:
-                    System.out.println("Enter Correct Input!!!\n");
-                    ch = false;
-                    break;
+        JLabel caL = new JLabel("Change Password");
+        caL.setFont(new Font("Ariel", Font.BOLD, 37));
+        caL.setBounds(190, 20, 360, 80);
+        caL.setForeground(Color.blue);
+
+        JLabel l1 = new JLabel("New Password:");
+        l1.setFont(new Font(null, Font.PLAIN, 25));
+        l1.setBounds(100, 30, 300, 80);
+
+        JTextField p1 = new JTextField();
+        p1.setBounds(100,130,300,40);
+
+        JLabel l2 = new JLabel("Re-enter Password:");
+        l2.setFont(new Font(null, Font.PLAIN, 25));
+        l2.setBounds(100, 200, 300, 80);
+
+        JTextField p2 = new JTextField();
+        p2.setBounds(100,300,300,40);
+
+        JButton update = new JButton("Update");
+        update.setBounds(210, 400, 100, 40);
+        update.addActionListener(e -> {
+            try {
+                if (!p1.getText().equals(p2.getText())) {
+                    p1.setText("");
+                    p2.setText("");
+                    JOptionPane.showMessageDialog(panel, "Passwords don't match", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    dao.changePass(user_name, p1.getText());
+                    JOptionPane.showMessageDialog(panel,"Password for " + user_name + " updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    frame.getContentPane().removeAll();
+                    frame.revalidate();
+                    frame.repaint();
+                    App.app();
+                }
+            }catch (Exception e1) {
+                System.out.println(e1.getMessage());
             }
-            ch = !ch;
-        }
+        });
+
+        panel.add(l1);
+        panel.add(l2);
+        panel.add(p1);
+        panel.add(p2);
+        panel.add(update);
+        frame.add(caL);
+        frame.add(panel);
+
     }
+    // private void makeT(String username) throws Exception {
+    //     boolean ch = true;
+    //     while (ch) {
+    //         System.out.println("\nSelect one of the following transactions:");
+    //         System.out.println("1) Credit into Account");
+    //         System.out.println("2) Debit from Account");
+    //         System.out.println("3) Transfer to another Account");
+    //         System.out.println("4) Back\n");
+    //         int c = sc.nextInt();
+    //         sc.nextLine();
+    //         System.out.println();
+
+    //         Transactions t = new Transactions();
+    //         switch (c) {
+    //             case 1:
+    //                 System.out.println("Enter the Account Number: ");
+    //                 String accNo = sc.nextLine();
+    //                 System.out.println("Enter the amount to be credited: ");
+    //                 double amt = sc.nextDouble();
+    //                 sc.nextLine();
+    //                 t.credit(amt, accNo);
+    //                 break;
+    //             case 2:
+    //                 System.out.println("Enter the Account Number: ");
+    //                 String acNo = sc.nextLine();
+    //                 System.out.println("Enter the amount to be debited: ");
+    //                 double am = sc.nextDouble();
+    //                 sc.nextLine();
+    //                 t.debit(username, am, acNo);
+    //                 break;
+    //             case 3:
+    //                 System.out.println("Enter the Sender's Account Number: ");
+    //                 String fAccNo = sc.nextLine();
+    //                 System.out.println("Enter the Receiver's Account Number: ");
+    //                 String tAccNo = sc.nextLine();
+    //                 System.out.println("Enter the amount to be credited: ");
+    //                 double amount = sc.nextDouble();
+    //                 sc.nextLine();
+    //                 t.transfer(username, amount, fAccNo, tAccNo);
+    //                 break;
+    //             case 4:
+    //                 menu(username);
+    //                 break;
+    //             default:
+    //                 System.out.println("Enter Correct Input!!!\n");
+    //                 ch = false;
+    //                 break;
+    //         }
+    //         ch = !ch;
+    //     }
+    // }
 }

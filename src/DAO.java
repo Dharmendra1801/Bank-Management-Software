@@ -51,7 +51,7 @@ public class DAO {
         ResultSet rs = ps.executeQuery();
         return rs.next();
     }
-    public void createAccount(String username, String type, double balance) throws Exception {
+    public String createAccount(String username, String type, double balance) throws Exception {
         String q2 = "select count(*) from acc_username where user_name = ?";
         PreparedStatement p2 = con.prepareStatement(q2);
         p2.setString(1, username);
@@ -63,13 +63,13 @@ public class DAO {
         p1.setString(1, AccNo);
         p1.setString(2, username);
         p1.executeUpdate();
-        System.out.println("\nYour account number is: "+AccNo);
         String q3 = "insert into accDet values(?,?,?)";
         PreparedStatement p3 = con.prepareStatement(q3);
         p3.setString(1, AccNo);
         p3.setString(2, type);
         p3.setDouble(3, balance);
         p3.executeUpdate();
+        return AccNo;
     }
     public List getAccounts(String user) throws Exception {
         String q = "SELECT u.Account_No, a.Account_Type FROM acc_username u JOIN accDet a on u.Account_No = a.Account_No WHERE user_name = ?";

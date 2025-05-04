@@ -6,6 +6,9 @@ import javax.swing.*;
 public class App {
     static Frame frame;
     public static void main(String[] args) throws Exception {
+        app();
+    }
+    public static void app() throws Exception {
         frame = new Frame();
         frame.setTitle("Mishra Bank");
 
@@ -44,7 +47,8 @@ public class App {
                 frame.getContentPane().removeAll();
                 frame.revalidate();
                 frame.repaint();
-                User_LogIn.LogIn();
+                // User_LogIn.LogIn();
+                new Account("uday2005");
             } catch (Exception e1) {
                 System.out.println(e1.getMessage()); 
             }

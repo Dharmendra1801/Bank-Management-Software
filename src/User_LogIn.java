@@ -8,7 +8,7 @@ public class User_LogIn {
     public static void Registration() throws Exception {
 
         RoundedPanel panel = new RoundedPanel();
-        // panel.setOpaque(true);
+        
         panel.setBounds(180, 100, 360, 500);
         panel.setLayout(null);
 
@@ -140,7 +140,7 @@ public class User_LogIn {
                     frame.revalidate();
                     frame.repaint();
                     JOptionPane.showMessageDialog(frame,"Works","Error",JOptionPane.ERROR_MESSAGE);
-                    // new Account(u_name);
+                    new Account(u_name);
                 }
                 else if (ans==-1) {
                     JOptionPane.showMessageDialog(frame,"Wrong Password","Error",JOptionPane.ERROR_MESSAGE);

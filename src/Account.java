@@ -1,16 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.util.*;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class Account {
     Scanner sc = new Scanner(System.in);
@@ -81,7 +72,7 @@ public class Account {
             frame.revalidate();
             frame.repaint();
             try {
-                // checkBal();
+                checkBal(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -185,7 +176,7 @@ public class Account {
             frame.revalidate();
             frame.repaint();
             try {
-                // checkBal();
+                checkBal(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -333,37 +324,58 @@ public class Account {
         panel.add(create);
         frame.add(caL);
         frame.add(panel);
-
-        // System.out.println("Enter the account number to be deleted: ");
-        // String accNo = sc.nextLine();
-        // System.out.println("Enter the password to proceed.");
-        // int n = 0;
-        // while (true) {
-        //     String pass = sc.nextLine();
-        //     if (n==3) {
-        //         System.out.println("\nContinous wrong passwords!!!");
-        //         System.out.println("Log in again");
-        //         n = Integer.MIN_VALUE;
-        //         break;
-        //     }
-        //     if (dao.loginCheckUser(username, pass)!=0) {
-        //         n++;
-        //     }
-        //     else break;
-        // }
-        // if (n==Integer.MIN_VALUE) User_LogIn.LogIn();
-        // System.out.println("\nAre you sure you want to delete it? (Press 'Y')");
-        // String c = sc.nextLine();
-        // if (!c.toUpperCase().equals("Y")) return;
-        // dao.delAcc(accNo);
-        // System.out.println("Account deleted");
     }
-    private void checkBal() throws Exception {
-        System.out.println("Enter the account number: ");
-        String accNo = sc.nextLine();
-        List<String> ls = dao.checkBal(accNo);
-        System.out.println("\nAccount type: " + ls.get(0));
-        System.out.println("Account balance: " + ls.get(1));
+    private void checkBal(String username) throws Exception {
+
+        RoundedPanel panel = new RoundedPanel();
+        panel.setBounds(100,150,520,360);
+
+        JLabel caL = new JLabel("Check Balance");
+        caL.setFont(new Font("Ariel", Font.BOLD, 37));
+        caL.setBounds(225, 20, 300, 80);
+        caL.setForeground(Color.blue);
+
+        JLabel accNL = new JLabel("Account No.:");
+        accNL.setFont(new Font(null, Font.PLAIN, 25));
+        accNL.setBounds(100, 30, 300, 80);
+
+        JTextField accNoF = new JTextField();
+        accNoF.setBounds(100,130,300,40);
+
+        JButton create = new JButton("Check");
+        create.setBounds(210, 230, 100, 40);
+        create.addActionListener(e -> {
+            try {
+                String accNo = accNoF.getText();
+                if (dao.accExist(accNo)) {
+                    List<String> ls = dao.checkBal(accNo);
+                    JOptionPane.showMessageDialog(panel,"<html>Account Type: " + ls.get(0) + "<br>Account Balance: " + ls.get(1) + "</html>","Balance", JOptionPane.PLAIN_MESSAGE);
+                    frame.getContentPane().removeAll();
+                    frame.revalidate();
+                    frame.repaint();
+                    menu(username);
+                }
+                else {
+                    accNoF.setText("");
+                    JOptionPane.showMessageDialog(panel,"Account no: "+ accNo +" doesn't exist", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+            }catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+        });
+
+        panel.add(accNL);
+        panel.add(accNoF);
+        panel.add(create);
+        frame.add(caL);
+        frame.add(panel);
+
+        // System.out.println("Enter the account number: ");
+        // String accNo = sc.nextLine();
+        // List<String> ls = dao.checkBal(accNo);
+        // System.out.println("\nAccount type: " + ls.get(0));
+        // System.out.println("Account balance: " + ls.get(1));
     }
     private void changePass(String username) throws Exception {
         boolean c = false;

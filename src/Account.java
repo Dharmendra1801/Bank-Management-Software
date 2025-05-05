@@ -101,6 +101,9 @@ public class Account {
         JMenuItem debit = new JMenuItem("Debit");
         debit.addActionListener(e -> {
             try {
+                frame.getContentPane().removeAll();
+                frame.revalidate();
+                frame.repaint();
                 Transactions.debit(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
@@ -110,7 +113,10 @@ public class Account {
         JMenuItem credit = new JMenuItem("Credit");
         credit.addActionListener(e -> {
             try {
-                Transactions.credit();
+                frame.getContentPane().removeAll();
+                frame.revalidate();
+                frame.repaint();
+                Transactions.credit(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -119,6 +125,9 @@ public class Account {
         JMenuItem transfer = new JMenuItem("Transfer");
         transfer.addActionListener(e -> {
             try {
+                frame.getContentPane().removeAll();
+                frame.revalidate();
+                frame.repaint();
                 Transactions.transfer(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
@@ -459,55 +468,4 @@ public class Account {
         frame.add(panel);
 
     }
-    // private void makeT(String username) throws Exception {
-    //     boolean ch = true;
-    //     while (ch) {
-    //         System.out.println("\nSelect one of the following transactions:");
-    //         System.out.println("1) Credit into Account");
-    //         System.out.println("2) Debit from Account");
-    //         System.out.println("3) Transfer to another Account");
-    //         System.out.println("4) Back\n");
-    //         int c = sc.nextInt();
-    //         sc.nextLine();
-    //         System.out.println();
-
-    //         Transactions t = new Transactions();
-    //         switch (c) {
-    //             case 1:
-    //                 System.out.println("Enter the Account Number: ");
-    //                 String accNo = sc.nextLine();
-    //                 System.out.println("Enter the amount to be credited: ");
-    //                 double amt = sc.nextDouble();
-    //                 sc.nextLine();
-    //                 t.credit(amt, accNo);
-    //                 break;
-    //             case 2:
-    //                 System.out.println("Enter the Account Number: ");
-    //                 String acNo = sc.nextLine();
-    //                 System.out.println("Enter the amount to be debited: ");
-    //                 double am = sc.nextDouble();
-    //                 sc.nextLine();
-    //                 t.debit(username, am, acNo);
-    //                 break;
-    //             case 3:
-    //                 System.out.println("Enter the Sender's Account Number: ");
-    //                 String fAccNo = sc.nextLine();
-    //                 System.out.println("Enter the Receiver's Account Number: ");
-    //                 String tAccNo = sc.nextLine();
-    //                 System.out.println("Enter the amount to be credited: ");
-    //                 double amount = sc.nextDouble();
-    //                 sc.nextLine();
-    //                 t.transfer(username, amount, fAccNo, tAccNo);
-    //                 break;
-    //             case 4:
-    //                 menu(username);
-    //                 break;
-    //             default:
-    //                 System.out.println("Enter Correct Input!!!\n");
-    //                 ch = false;
-    //                 break;
-    //         }
-    //         ch = !ch;
-    //     }
-    // }
 }

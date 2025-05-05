@@ -112,7 +112,7 @@ public class User_LogIn {
 
         RoundedPanel panel = new RoundedPanel();
     
-        panel.setBounds(180, 100, 380, 420);
+        panel.setBounds(180, 100, 380, 440);
         panel.setLayout(null);
 
         JLabel unL = new JLabel("Username:");

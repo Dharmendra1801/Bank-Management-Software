@@ -48,7 +48,7 @@ public class Account {
             frame.revalidate();
             frame.repaint();
             try {
-                // accList(username);
+                accList(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -189,7 +189,7 @@ public class Account {
             frame.revalidate();
             frame.repaint();
             try {
-                // accList(username);
+                accList(username);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
@@ -309,11 +309,44 @@ public class Account {
         frame.add(panel);
     }
     private void accList(String user_name) throws Exception{
-        List<List<Integer>> ls = dao.getAccounts(user_name);
-        System.out.println("Account Numbers associated with the user name: " + user_name + " are:\n");
-        for (List x: ls) {
-            System.out.println("Account Number: " + x.get(0) + "\tAccount Type: " + x.get(1));
+
+        RoundedPanel panel = new RoundedPanel();
+        panel.setBounds(100,120,520,480);
+
+        JLabel caL = new JLabel("Accounts Linked");
+        caL.setFont(new Font("Ariel", Font.BOLD, 37));
+        caL.setBounds(200, 20, 400, 80);
+        caL.setForeground(Color.blue);
+
+        List<List<String>> ls = dao.getAccounts(user_name);
+        String[] accounts = new String[ls.size()];
+        int i = 0;
+        for (List<String> temp : ls) {
+            String acc = "<html>"+(i+1)+") Account No.: "+temp.get(0)+"<br>"+(i+1)+") Account Type: "+temp.get(1)+"<br><br></html>";
+            accounts[i++] = acc;
         }
+
+        JList<String> list = new JList<>(accounts);
+        list.setFont(new Font("Ariel", Font.PLAIN, 20));
+        list.setOpaque(true); 
+        list.setSelectionBackground(Color.WHITE);
+        list.setSelectionForeground(Color.BLACK);
+        list.setFocusable(false);
+
+
+        JScrollPane sList = new JScrollPane(list);
+        sList.setBounds(30, 30, 440, 400);
+        sList.setOpaque(true);
+        sList.getViewport().setOpaque(true);
+        sList.setBorder(BorderFactory.createEmptyBorder());
+        sList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        panel.setLayout(null);
+        panel.add(sList);
+        panel.setBackground(Color.white);
+
+        frame.add(caL);
+        frame.add(panel);
     }
     private void delAcc(String username) throws Exception {
 

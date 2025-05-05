@@ -71,7 +71,7 @@ public class DAO {
         p3.executeUpdate();
         return AccNo;
     }
-    public List getAccounts(String user) throws Exception {
+    public List<List<String>> getAccounts(String user) throws Exception {
         String q = "SELECT u.Account_No, a.Account_Type FROM acc_username u JOIN accDet a on u.Account_No = a.Account_No WHERE user_name = ?";
         PreparedStatement ps = con.prepareStatement(q);
         ps.setString(1, user);
